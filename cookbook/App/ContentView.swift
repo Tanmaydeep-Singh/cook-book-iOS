@@ -4,18 +4,21 @@
 //
 //  Created by tanmaydeep on 31/01/26.
 //
-
 import SwiftUI
 
 struct ContentView: View {
+    @State private var path = NavigationPath()
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationStack(path: $path) {
+            HomeView(path: $path)
+                .navigationDestination(for: Routes.self) { route in
+                    switch route {
+                    case .recipeDetails:
+                        RecipeDetailsView(path: $path)
+                    }
+                }
         }
-        .padding()
     }
 }
 
