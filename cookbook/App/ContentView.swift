@@ -17,6 +17,8 @@ struct ContentView: View {
                     switch route {
                     case .recipeDetails:
                         RecipeDetailsView(path: $path)
+                    case .addRecipe:
+                        AddRecipeView()
                     }
                 }
         }

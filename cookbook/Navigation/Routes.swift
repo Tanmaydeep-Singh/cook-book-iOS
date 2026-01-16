@@ -9,4 +9,5 @@ import Foundation
 
 enum Routes: String, CaseIterable {
     case recipeDetails
+    case addRecipe
 }

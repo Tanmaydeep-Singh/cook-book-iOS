@@ -39,6 +39,16 @@ struct HomeView: View {
             .padding(2)
             .scaleEffect(zoomScale)
             .navigationTitle("Cookbook")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        path.append(Routes.addRecipe)
+                    } label: {
+                        Image(systemName: "plus")
+                    }
+                    }
+                
+            }
             .simultaneousGesture(
                 MagnificationGesture()
                     .onChanged { value in
@@ -59,9 +69,7 @@ struct HomeView: View {
                         }
                     }
             )
-            Button("Go to Recipes") {
-                path.append(Routes.recipeDetails)
-            }
+           
         }
     }
 }
