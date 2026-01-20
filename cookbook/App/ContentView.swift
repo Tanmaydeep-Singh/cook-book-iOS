@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct ContentView: View {
     @State private var path = NavigationPath()
@@ -24,7 +25,11 @@ struct ContentView: View {
         }
     }
 }
-
 #Preview {
-    ContentView()
+    let context = CoreDataManager.shared.container.viewContext
+    let service = RecipeService(context: context)
+    let viewModel = HomeViewModel(recipeService: service)
+    
+    return ContentView()
+        .environmentObject(viewModel)
 }

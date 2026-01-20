@@ -13,6 +13,7 @@
 		144EE8A92F307AB40030FBCA /* InstructionEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 144EE8A22F307AB40030FBCA /* InstructionEntity+CoreDataClass.swift */; };
 		144EE8AA2F307AB40030FBCA /* InstructionEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 144EE8A32F307AB40030FBCA /* InstructionEntity+CoreDataProperties.swift */; };
 		144EE8AB2F307AB40030FBCA /* IngredientEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 144EE8A12F307AB40030FBCA /* IngredientEntity+CoreDataProperties.swift */; };
+		144EE8BB2F3090020030FBCA /* RecipeEntity+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 144EE8BA2F3090020030FBCA /* RecipeEntity+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,6 +24,7 @@
 		144EE8A32F307AB40030FBCA /* InstructionEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InstructionEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		144EE8A42F307AB40030FBCA /* RecipeEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RecipeEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
 		144EE8A52F307AB40030FBCA /* RecipeEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RecipeEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		144EE8BA2F3090020030FBCA /* RecipeEntity+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RecipeEntity+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -47,6 +49,7 @@
 		144EE84A2F2DCA4C0030FBCA = {
 			isa = PBXGroup;
 			children = (
+				144EE8BA2F3090020030FBCA /* RecipeEntity+Extensions.swift */,
 				144EE8A02F307AB40030FBCA /* IngredientEntity+CoreDataClass.swift */,
 				144EE8A12F307AB40030FBCA /* IngredientEntity+CoreDataProperties.swift */,
 				144EE8A22F307AB40030FBCA /* InstructionEntity+CoreDataClass.swift */,
@@ -146,6 +149,7 @@
 				144EE8A92F307AB40030FBCA /* InstructionEntity+CoreDataClass.swift in Sources */,
 				144EE8AA2F307AB40030FBCA /* InstructionEntity+CoreDataProperties.swift in Sources */,
 				144EE8AB2F307AB40030FBCA /* IngredientEntity+CoreDataProperties.swift in Sources */,
+				144EE8BB2F3090020030FBCA /* RecipeEntity+Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
