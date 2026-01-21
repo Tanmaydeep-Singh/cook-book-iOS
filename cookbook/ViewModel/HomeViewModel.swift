@@ -8,10 +8,11 @@
 import Foundation
 import Combine
 
-@MainActor
-final class HomeViewModel: ObservableObject {
 
-    @Published var recipes: [RecipeEntity] = []
+@Observable
+final class HomeViewModel {
+
+   var recipes: [RecipeEntity] = []
 
     private let recipeService: RecipeService
 

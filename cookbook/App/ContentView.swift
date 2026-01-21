@@ -25,11 +25,12 @@ struct ContentView: View {
         }
     }
 }
+
 #Preview {
     let context = CoreDataManager.shared.container.viewContext
     let service = RecipeService(context: context)
     let viewModel = HomeViewModel(recipeService: service)
     
-    return ContentView()
-        .environmentObject(viewModel)
+    ContentView()
+        .environment(viewModel) 
 }

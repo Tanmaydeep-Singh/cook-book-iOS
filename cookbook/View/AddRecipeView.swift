@@ -4,49 +4,39 @@
 //
 //  Created by tanmaydeep on 01/02/26.
 //
+
 import SwiftUI
 import PhotosUI
+import CoreData
 
 struct AddRecipeView: View {
-
-    // MARK: - Form State
-    @State private var title = ""
-    @State private var description = ""
-
-    @State private var ingredients: [String] = []
-    @State private var instructions: [String] = []
-
+    @Environment(AddRecipeViewModel.self) private var viewModel
+    @Environment(\.dismiss) private var dismiss
+    
     @State private var newIngredient = ""
     @State private var newInstruction = ""
 
-    @State private var selectedImage: PhotosPickerItem?
-    @State private var recipeImage: Image?
-
     var body: some View {
+        @Bindable var vm = viewModel
+        
         ScrollView(.vertical, showsIndicators: false) {
             VStack(alignment: .leading, spacing: 20) {
 
-                // MARK: - Title Field
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Recipe Title")
-                        .font(.headline)
-
-                    TextField("Enter recipe name", text: $title)
+                    Text("Recipe Title").font(.headline)
+                    TextField("Enter recipe name", text: $vm.title)
                         .textFieldStyle(.roundedBorder)
                 }
 
-                // MARK: - Image Picker
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Recipe Image")
-                        .font(.headline)
-
-                    PhotosPicker(selection: $selectedImage, matching: .images) {
+                    Text("Recipe Image").font(.headline)
+                    PhotosPicker(selection: $vm.selectedImageItem, matching: .images) {
                         ZStack {
                             RoundedRectangle(cornerRadius: 12)
                                 .fill(Color.gray.opacity(0.15))
                                 .frame(height: 200)
 
-                            if let recipeImage {
+                            if let recipeImage = vm.recipeImage {
                                 recipeImage
                                     .resizable()
                                     .scaledToFill()
@@ -55,8 +45,7 @@ struct AddRecipeView: View {
                                     .cornerRadius(12)
                             } else {
                                 VStack(spacing: 8) {
-                                    Image(systemName: "photo")
-                                        .font(.largeTitle)
+                                    Image(systemName: "photo").font(.largeTitle)
                                     Text("Add Image")
                                 }
                                 .foregroundColor(.gray)
@@ -67,107 +56,82 @@ struct AddRecipeView: View {
 
                 Divider()
 
-                // MARK: - Ingredients Section
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("Ingredients")
-                        .font(.title2)
-                        .fontWeight(.semibold)
-
+                    Text("Ingredients").font(.title2).fontWeight(.semibold)
                     HStack {
                         TextField("Add ingredient", text: $newIngredient)
                             .textFieldStyle(.roundedBorder)
-
                         Button("Add") {
                             guard !newIngredient.isEmpty else { return }
-                            ingredients.append(newIngredient)
+                            vm.ingredients.append(newIngredient)
                             newIngredient = ""
                         }
                     }
-
-                    ForEach(ingredients, id: \.self) { item in
+                    ForEach(vm.ingredients, id: \.self) { item in
                         Text("• \(item)")
                     }
                 }
 
                 Divider()
 
-                // MARK: - Instructions Section
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("Instructions")
-                        .font(.title2)
-                        .fontWeight(.semibold)
-
+                    Text("Instructions").font(.title2).fontWeight(.semibold)
                     HStack {
                         TextField("Add instruction", text: $newInstruction)
                             .textFieldStyle(.roundedBorder)
-
                         Button("Add") {
                             guard !newInstruction.isEmpty else { return }
-                            instructions.append(newInstruction)
+                            vm.instructions.append(newInstruction)
                             newInstruction = ""
                         }
                     }
-
-                    ForEach(instructions.indices, id: \.self) { index in
-                        Text("\(index + 1). \(instructions[index])")
+                    ForEach(vm.instructions.indices, id: \.self) { index in
+                        Text("\(index + 1). \(vm.instructions[index])")
                     }
                 }
 
                 Divider()
 
-                // MARK: - Description
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Description")
-                        .font(.title2)
-                        .fontWeight(.semibold)
-
-                    TextEditor(text: $description)
+                    Text("Description").font(.title2).fontWeight(.semibold)
+                    TextEditor(text: $vm.description)
                         .frame(height: 120)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(Color.gray.opacity(0.3))
-                        )
+                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.3)))
                 }
 
-                // MARK: - Save Button
-                Button(action: saveRecipe) {
+                Button(action: {
+                    if viewModel.saveRecipe() {
+                        dismiss()
+                    }
+                }) {
                     Text("Save Recipe")
+                        .bold()
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color.blue)
+                        .background(vm.title.isEmpty ? Color.gray : Color.blue)
                         .foregroundColor(.white)
                         .cornerRadius(12)
                 }
+                .disabled(vm.title.isEmpty)
             }
             .padding()
         }
         .navigationTitle("Add Recipe")
         .navigationBarTitleDisplayMode(.inline)
-        .onChange(of: selectedImage) { newValue in
-            loadImage(from: newValue)
+        
+        .task(id: vm.selectedImageItem) {
+            await viewModel.handleImageChange()
         }
-    }
-
-    // MARK: - Helpers
-    private func loadImage(from item: PhotosPickerItem?) {
-        guard let item else { return }
-
-        Task {
-            if let data = try? await item.loadTransferable(type: Data.self),
-               let uiImage = UIImage(data: data) {
-                recipeImage = Image(uiImage: uiImage)
-            }
-        }
-    }
-
-    private func saveRecipe() {
-        print("Saved Recipe:")
-        print(title, ingredients, instructions, description)
     }
 }
 
+
 #Preview {
-    NavigationStack {
+    let context = CoreDataManager.shared.container.viewContext
+    let mockViewModel = AddRecipeViewModel(context: context)
+    
+    return NavigationStack {
         AddRecipeView()
     }
+    .environment(mockViewModel)
 }

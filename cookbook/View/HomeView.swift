@@ -10,8 +10,8 @@ import Combine
 internal import CoreData
 struct HomeView: View {
     @Binding var path: NavigationPath
-    @EnvironmentObject private var viewModel: HomeViewModel
-
+    @Environment(HomeViewModel.self) private var viewModel
+    
     @State private var columns: Int = 2
     @State private var zoomScale: CGFloat = 1.0
 
