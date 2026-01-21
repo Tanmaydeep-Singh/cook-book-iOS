@@ -39,7 +39,7 @@ struct HomeView: View {
                 columns: $columns,
                 zoomScale: $zoomScale,
                 onSelect: { recipe in
-                    path.append(Routes.recipeDetails)
+                    path.append(Routes.recipeDetails(recipe))
                 }
             )
         }

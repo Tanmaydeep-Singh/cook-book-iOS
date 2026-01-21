@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Routes: String, CaseIterable {
-    case recipeDetails
+enum Routes: Hashable {
+    case recipeDetails(RecipeEntity)
     case addRecipe
 }
