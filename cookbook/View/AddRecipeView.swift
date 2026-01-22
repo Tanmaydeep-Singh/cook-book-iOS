@@ -11,10 +11,13 @@ import CoreData
 
 struct AddRecipeView: View {
     @Environment(AddRecipeViewModel.self) private var viewModel
+    @Environment(HomeViewModel.self) private var homeViewModel
     @Environment(\.dismiss) private var dismiss
     
     @State private var newIngredient = ""
     @State private var newInstruction = ""
+    
+    @State private var showSuccessAlert = false
 
     var body: some View {
         @Bindable var vm = viewModel
@@ -101,7 +104,8 @@ struct AddRecipeView: View {
 
                 Button(action: {
                     if viewModel.saveRecipe() {
-                        dismiss()
+                        homeViewModel.fetchRecipes()
+                        showSuccessAlert = true
                     }
                 }) {
                     Text("Save Recipe")
@@ -118,20 +122,15 @@ struct AddRecipeView: View {
         }
         .navigationTitle("Add Recipe")
         .navigationBarTitleDisplayMode(.inline)
-        
+        .alert("Recipe Saved", isPresented: $showSuccessAlert) {
+            Button("OK") {
+                dismiss()
+            }
+        } message: {
+            Text("Your recipe has been successfully added to the cookbook.")
+        }
         .task(id: vm.selectedImageItem) {
             await viewModel.handleImageChange()
         }
     }
-}
-
-
-#Preview {
-    let context = CoreDataManager.shared.container.viewContext
-    let mockViewModel = AddRecipeViewModel(context: context)
-    
-    return NavigationStack {
-        AddRecipeView()
-    }
-    .environment(mockViewModel)
 }
